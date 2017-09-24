@@ -15,7 +15,14 @@ class UsersTableSeeder extends Seeder
             'name'=>'watc2h',
             'email'=>'test@test.com',
             'password' => bcrypt('password'),
-            //'admin' => 1
+            'admin' => 1
+            ]);
+        App\Profile::create([
+                'user_id' => $user->id,
+                'avatar'=> 'upload/avatars/1.jpg',
+                'about'=>'lorem fsdffsjfksjflsf fjsdklfjs;fjs;fjsdf',
+                'facebook'=>'facebook.com',
+                'youtube'=>'youtube.com'
             ]);
     }
 }
