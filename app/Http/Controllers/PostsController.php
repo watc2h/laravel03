@@ -127,8 +127,30 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function trashed(){
+        $posts=Post::onlyTrashed()->get();
+        return view('admin.posts.trash')->with('posts',$posts);
+    }
     public function destroy($id)
     {
-        //
+        $post=Post::find($id);
+        $post->delete();
+        Session::flash('success','The post was just trashed.');
+        return redirect()->back();
+    }
+    public function kill($id){
+        $post=Post::withTrashed()->where('id',$id)->first();
+        
+        //dd($post);
+        $post->forceDelete();
+        Session::flash('success','Post deleted permanently');
+        
+        return redirect()->back();
+    }
+    public function restore($id){
+        $post =Post::withTrashed()->where('id',$id)->first();
+        $post->restore();
+        Session::flash('success','Post restored successfully.');
+        return redirect()->route('posts');
     }
 }
