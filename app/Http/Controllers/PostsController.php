@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\Post;
+use App\Category;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -25,7 +26,17 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        //return view('admin.posts.create');
+        
+        $categories=Category::all();
+        
+        if($categories->count()==0){
+            Session::flash('info','You must have some categories before attempting to create a post.');
+            return redirect()->back();
+        }
+        
+        
+        return view('admin.posts.create')->with('categories',$categories);
     }
 
     /**
@@ -42,7 +53,7 @@ class PostsController extends Controller
                 'title' => 'required',
                 'featured' => 'required|image',
                 'content' => 'required',
-                //'category_id' =>'required',
+                'category_id' =>'required',
                 //'tags' =>'required'
                 
             ]);
