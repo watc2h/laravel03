@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Session;
+use App\Post;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -34,7 +36,46 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
+        
+       $this->validate($request,[
+                'title' => 'required',
+                'featured' => 'required|image',
+                'content' => 'required',
+                //'category_id' =>'required',
+                //'tags' =>'required'
+                
+            ]);
+        
+        $featured=$request->featured;
+        $featured_new_name=time().$featured->getClientOriginalName();//symfony function
+        $featured->move('uploads/posts/',$featured_new_name);
+        
+        //dd($request->all());
+        
+        //$post=new Post;
+        
+        $post=Post::create([
+            'title' => $request->title,
+            'content'=> $request->content,
+            'featured' => 'uploads/posts/'.$featured_new_name,
+            'category_id' => $request->category_id,
+            //'slug' => str_slug($request->title)
+            ]);
+            
+            
+            
+        //$post->tags()->attach($request->tags);
+            
+         Session::flash('success','Post created succesfully');
+        
+        
+        return redirect()->back();
+        
+        
+        
+        
+        
     }
 
     /**
