@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Session;
-use App\Post;
+
+use App\Category;
+
 use Illuminate\Http\Request;
 
-class PostsController extends Controller
+class CategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,6 +18,7 @@ class PostsController extends Controller
     public function index()
     {
         //
+        return view('admin.categories.index')->with('categories',Category::all());
     }
 
     /**
@@ -25,7 +28,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        return view('admin.categories.create');
     }
 
     /**
@@ -36,44 +39,17 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        
-       $this->validate($request,[
-                'title' => 'required',
-                'featured' => 'required|image',
-                'content' => 'required',
-                //'category_id' =>'required',
-                //'tags' =>'required'
-                
+        $this->validate($request,[
+            'name' => 'required'
             ]);
+        $category = new Category;
         
-        $featured=$request->featured;
-        $featured_new_name=time().$featured->getClientOriginalName();//symfony function
-        $featured->move('uploads/posts/',$featured_new_name);
+        $category->name =$request->name;
+        $category->save();
         
-
+        Session::flash('success','You succesfully created a category.');
         
-        $post=Post::create([
-            'title' => $request->title,
-            'content'=> $request->content,
-            'featured' => 'uploads/posts/'.$featured_new_name,
-            'category_id' => $request->category_id,
-            //'slug' => str_slug($request->title)
-            ]);
-            
-            
-            
-        //$post->tags()->attach($request->tags);
-            
-         Session::flash('success','Post created succesfully');
-        
-        
-        return redirect()->back();
-        
-        
-        
-        
-        
+        return redirect()->route('categories');
     }
 
     /**
@@ -85,6 +61,7 @@ class PostsController extends Controller
     public function show($id)
     {
         //
+        
     }
 
     /**
@@ -96,6 +73,9 @@ class PostsController extends Controller
     public function edit($id)
     {
         //
+        $category = Category::find($id);
+        
+        return view('admin.categories.edit')->with('category',$category);
     }
 
     /**
@@ -108,6 +88,13 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $category = Category::find($id);
+        $category->name =$request->name;
+        $category->save();
+        
+        Session::flash('success','You succesfully updated the category.');
+        
+        return redirect()->route('categories');
     }
 
     /**
@@ -119,5 +106,11 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
+        $category = Category::find($id);
+        $category->delete();
+        
+        Session::flash('success','You succesfully deleted the category.');
+        
+        return redirect()->route('categories');
     }
 }
