@@ -44,7 +44,7 @@ class TagsController extends Controller
             'tag'=>$request->tag
             ]);
         Session::flash('success','Tag created successfully');
-        return redirect()->back();
+        return redirect()->route('tags');
     }
 
     /**
