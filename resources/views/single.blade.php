@@ -103,19 +103,19 @@
                         <div class="socials">
 
                             <a href="#" class="social__item">
-                                <img src="app/svg/circle-facebook.svg" alt="facebook">
+                                <img src="{{asset('app/svg/circle-facebook.svg')}}" alt="facebook">
                             </a>
 
                             <a href="#" class="social__item">
-                                <img src="app/svg/twitter.svg" alt="twitter">
+                                <img src="{{asset('app/svg/twitter.svg')}}" alt="twitter">
                             </a>
 
                             <a href="#" class="social__item">
-                                <img src="app/svg/google.svg" alt="google">
+                                <img src="{{asset('app/svg/google.svg')}}" alt="google">
                             </a>
 
                             <a href="#" class="social__item">
-                                <img src="app/svg/youtube.svg" alt="youtube">
+                                <img src="{{asset('app/svg/youtube.svg')}}" alt="youtube">
                             </a>
 
                         </div>
@@ -124,25 +124,33 @@
 
                 <div class="pagination-arrow">
 
-                    <a href="#" class="btn-prev-wrap">
-                        <svg class="btn-prev">
-                            <use xlink:href="#arrow-left"></use>
-                        </svg>
+                    @if($prev)
+                    <a href="{{route('post.single',['slug' => $prev->slug])}}" class="btn-next-wrap">
                         <div class="btn-content">
                             <div class="btn-content-title">Next Post</div>
-                            <p class="btn-content-subtitle">Claritas Est Etiam Processus</p>
-                        </div>
-                    </a>
-
-                    <a href="#" class="btn-next-wrap">
-                        <div class="btn-content">
-                            <div class="btn-content-title">Previous Post</div>
-                            <p class="btn-content-subtitle">Duis Autem Velius</p>
+                            <p class="btn-content-subtitle">{{$prev->title}}</p>
                         </div>
                         <svg class="btn-next">
                             <use xlink:href="#arrow-right"></use>
                         </svg>
                     </a>
+                    @endif
+
+
+
+                    @if($next)
+                    <a href="{{route('post.single',['slug' => $next->slug])}}" class="btn-prev-wrap">
+                        <svg class="btn-prev">
+                            <use xlink:href="#arrow-left"></use>
+                        </svg>
+                        <div class="btn-content">
+                            <div class="btn-content-title">Prev Post</div>
+                            <p class="btn-content-subtitle">{{$next->title}}</p>
+                        </div>
+                    </a>
+                    @endif
+        
+                    
 
                 </div>
 
@@ -156,6 +164,11 @@
                         </div>
                     </div>
                 </div>
+                
+                
+                @include('includes.disqus')
+                
+                
 
                 <div class="row">
 
@@ -180,15 +193,10 @@
                         </div>
 
                         <div class="tags-wrap">
-                            <a href="#" class="w-tags-item">SEO</a>
-                            <a href="#" class="w-tags-item">Advertising</a>
-                            <a href="#" class="w-tags-item">Business</a>
-                            <a href="#" class="w-tags-item">Optimization</a>
-                            <a href="#" class="w-tags-item">Digital Marketing</a>
-                            <a href="#" class="w-tags-item">Social</a>
-                            <a href="#" class="w-tags-item">Keyword</a>
-                            <a href="#" class="w-tags-item">Strategy</a>
-                            <a href="#" class="w-tags-item">Audience</a>
+                            
+                            @foreach($tags as $tag)
+                                <a href="#" class="w-tags-item">{{$tag->tag}}</a>
+                            @endforeach
                         </div>
                     </div>
                 </aside>
